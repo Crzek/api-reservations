@@ -1,8 +1,18 @@
 package com.cruzerick.api_reservations.dto;
 
+import com.cruzerick.api_reservations.validators.IataFormatConstrainst;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class SegmentDTO {
+
+//    @NotBlank(message = "Origin is required")
+//    @Size(min = 3, max = 3, message = "Origin must have 3 characters")
+    @IataFormatConstrainst
     private String origin;
 
+    @NotBlank(message = "Origin is required")
+    @Size(min = 3, max = 3, message = "Origin must have 3 characters")
     private String destination;
 
     private String departure;

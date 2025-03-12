@@ -1,0 +1,37 @@
+# Configuration for the application
+# endpoints are exposed to the base path
+management:
+  # hacer anteriormente spring actuator
+  info:
+    env:
+      enabled: true
+    endpoints:
+      health:
+        show-details: always #trae toda la informacion de los endpoints
+
+  endpoints:
+    web:
+      base-path: /
+      exposure: # Expose all endpoints
+        # Expose all endpoints
+        include: "*"
+
+# config del servidor
+server:
+  port: 8080
+  # conf respuesta comprimida
+  compression:
+    enabled: true #activar compresion
+    min-response-size: 2048 # 2kb
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain
+  # nuevo path donde corre la aplicacion
+  servlet:
+    context-path: /api
+
+# definir formato info
+# estos valores vienen del pom.xml
+info:
+  application:
+    groupId: '@project.groupId@'
+    artifactId: '@project.artifactId@'
+    version: '@project.version@'

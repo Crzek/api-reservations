@@ -3,6 +3,7 @@ package com.cruzerick.api_reservations.repository;
 import com.cruzerick.api_reservations.models.*;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.util.*;

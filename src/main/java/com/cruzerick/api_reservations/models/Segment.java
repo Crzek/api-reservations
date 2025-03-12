@@ -1,4 +1,4 @@
-package com.edteam.reservations.model;
+package com.cruzerick.api_reservations.models;
 
 public class Segment {
 
