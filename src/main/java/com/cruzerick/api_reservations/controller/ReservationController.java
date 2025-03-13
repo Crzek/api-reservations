@@ -1,9 +1,12 @@
 package com.cruzerick.api_reservations.controller;
 
+import com.cruzerick.api_reservations.controller.resources.ReservationResource;
 import com.cruzerick.api_reservations.dto.ReservationDTO;
 import com.cruzerick.api_reservations.services.ReservationService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +20,9 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping("/reservations")
-public class ReservationController {
+public class ReservationController implements ReservationResource {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReservationController.class);
 
     private ReservationService service;
 
@@ -28,6 +33,7 @@ public class ReservationController {
 
     @GetMapping
     public ResponseEntity<List<ReservationDTO>> getReservations(){
+        LOGGER.info("ejeuctando getReservations");
         List<ReservationDTO> response = service.getReservations();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -51,7 +57,8 @@ public class ReservationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> getReservations(@Min(1) @PathVariable long id){
+    public ResponseEntity<Void> deleteReservations(@Min(1) @PathVariable long id){
+        LOGGER.debug("Deleting reservation with id: {} ", id);
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
