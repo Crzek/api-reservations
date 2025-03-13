@@ -1,6 +1,9 @@
 package com.cruzerick.api_reservations.services;
 
+import com.cruzerick.api_reservations.connector.CatalogConnector;
+import com.cruzerick.api_reservations.connector.response.CityDTO;
 import com.cruzerick.api_reservations.dto.ReservationDTO;
+import com.cruzerick.api_reservations.dto.SegmentDTO;
 import com.cruzerick.api_reservations.enums.APIError;
 import com.cruzerick.api_reservations.exeptions.APIErrorExeption;
 import com.cruzerick.api_reservations.exeptions.MsgExeption;
@@ -22,12 +25,16 @@ public class ReservationService {
     // para los mappers de mapstruct
     private ConversionService conversionService;
 
+    private CatalogConnector connector;
+
     // El autoinjeccion se hace en el constructor
     @Autowired
     public ReservationService(ReservationRepository repository,
-                              ConversionService conversionService) {
+                              ConversionService conversionService,
+                                CatalogConnector connector) {
         this.repository = repository;
         this.conversionService = conversionService;
+        this.connector = connector;
     }
 
     // Metodos de Services
@@ -55,7 +62,7 @@ public class ReservationService {
 //            throw new MsgExeption("Duplicate it");
             throw new APIErrorExeption(APIError.MSG_WITH_SAME_ID);
         }
-
+        checkCity(reservation);
         Reservation transformed = conversionService.convert(reservation, Reservation.class);
         Reservation result = repository.save(Objects.requireNonNull(transformed));
         return conversionService.convert(result, ReservationDTO.class);
@@ -67,6 +74,7 @@ public class ReservationService {
             throw  new  APIErrorExeption(APIError.MSG_NOT_FOUND);
         }
 
+        this.checkCity(reservation);
         Reservation transformed = conversionService.convert(reservation, Reservation.class);
         Reservation result = repository.update(id, Objects.requireNonNull(transformed));
         return conversionService.convert(result, ReservationDTO.class);
@@ -80,4 +88,19 @@ public class ReservationService {
 
         repository.delete(id);
     }
+
+    private void checkCity(ReservationDTO reservationDTO) {
+        for (SegmentDTO segmentDTO : reservationDTO.getItinerary().getSegment()){
+            CityDTO origin = connector.getCity(segmentDTO.getOrigin());
+            CityDTO destination = connector.getCity(segmentDTO.getDestination());
+
+            if (origin == null || destination == null) {
+                throw new APIErrorExeption(APIError.MSG_NOT_FOUND);
+            }else {
+                System.out.println(origin.getName());
+                System.out.println(destination.getName());
+            }
+        }
+    }
+
 }
