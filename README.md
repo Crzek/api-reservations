@@ -2,7 +2,6 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Este repositorio contiene toda la informacion acerca del curso, como por ejemplo el codigo fuente que se fue generando en cada una de las clases
 
 ## Requerimientos
 
